@@ -1,0 +1,47 @@
+---
+- name: "[{{ name }}] Конфигурация секрета"
+  block:
+    - name: "[{{ name }}] Создаем секрет"
+      vars:
+        env_file: "{{ lookup('template', '.env.j2') }}"
+      community.docker.docker_secret:
+        name: "{{ name }}.env"
+        data: "{{ env_file | b64encode }}"
+        labels:
+          secret: "{{ env_file | hash('sha1') }}"
+        data_is_b64: true
+        state: present
+  tags: "{{ name }}"
+
+  rescue:
+    - name: "[{{ name }}] Удаляем сервис"
+      community.docker.docker_swarm_service:
+        name: "{{ name }}"
+        state: absent 
+
+    - name: "[{{ name }}] Создаем секрет"
+      vars:
+        env_file: "{{ lookup('template', '.env.j2') }}"
+      community.docker.docker_secret:
+        name: "{{ name }}.env"
+        data: "{{ env_file | b64encode }}"
+        labels:
+          secret: "{{ env_file | hash('sha1') }}"
+        data_is_b64: true
+        state: present
+
+
+  
+- name: "[{{ name }}] Выкладка сервиса"
+  block:
+    - name: "[{{ name }}] Выкладываем сервис"
+      community.docker.docker_swarm_service:
+        name: "{{ name }}"
+        image: "{{ registry_name }}{{ name }}:{{ version }}"
+        state: present
+        networks:
+          - name: "{{ network_name }}"
+        secrets:
+          - secret_name: "{{ name }}.env"
+            filename: "/opt/app/.env"
+  tags: "{{ name }}"

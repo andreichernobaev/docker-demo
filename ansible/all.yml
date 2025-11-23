@@ -1,0 +1,23 @@
+---
+- name: Deploy / build server
+  hosts: deploy
+  roles:
+    - role: preconfig
+      tags: preconfig
+    - role: build
+      tags: build
+    - role: deploy
+      tags: deploy
+#    - swarm_init
+
+- name: Manager
+  hosts: managers
+  roles:
+    - preconfig
+#    - swarm_join
+
+- name: Worker
+  hosts: workers
+  roles:
+    - preconfig
+#    - swarm_join

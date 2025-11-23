@@ -1,0 +1,7 @@
+argument_specs:
+  main:
+    short_description: Настройка серверов для работы с Docker
+    author: Andrei Chernobaev
+    description: Настройка серверов для работы с Docker
+# dependencies:
+#   - role: deploy

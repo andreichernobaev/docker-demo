@@ -1,0 +1,10 @@
+[deploy]
+server2 ansible_host=192.168.1.66 ansible_user=andrei
+
+[managers]
+server3 ansible_host=192.168.1.67 ansible_user=andrei
+server4 ansible_host=192.168.1.68 ansible_user=andrei
+
+[workers]
+server5 ansible_host=192.168.1.69 ansible_user=andrei
+server6 ansible_host=192.168.1.70 ansible_user=andrei
