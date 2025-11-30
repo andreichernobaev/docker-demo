@@ -1,0 +1,15 @@
+---
+- name: "Подключение Masters" 
+  community.docker.docker_swarm:
+    state: join
+    remote_addrs: "{{ advertise_addr }}"
+    join_token: /home/andrei/ansible/token-managers
+
+
+- name: "Подключение Workers"
+  community.docker.docker_swarm:
+    state: join 
+    remote_addrs: "{{ advertise_addr }}"
+    join_token: /home/andrei/ansible/token-worker
+  
+  
